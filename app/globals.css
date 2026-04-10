@@ -1,26 +1,623 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ── Colors ─────────────────────────────────────────────── */
+  /* Clean Minimal palette — bg white/off-white, text near-black, accent blue */
+  --color-brand-base: #ffffff;
+  --color-brand-surface: #f7f7f7;
+  --color-brand-elevated: #f0f0f0;
+  --color-brand-primary: #0a0a0a;
+  --color-brand-secondary: #555555;
+  --color-brand-tertiary: #888888;
+  --color-brand-accent: #0057ff;
+  --color-brand-accent-hover: #0046cc;
+  --color-brand-border: rgba(0, 0, 0, 0.08);
+  --color-brand-border-strong: rgba(0, 0, 0, 0.16);
+
+  /* ── Fonts ───────────────────────────────────────────────── */
+  /* Cabinet Grotesk is Fontshare-only — Plus Jakarta Sans is the closest  */
+  /* Google Fonts equivalent (geometric grotesque, same display weight feel) */
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', 'Courier New', monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ── Base ──────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  /* padding: 0; */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100%;
+  background-color: var(--color-brand-base);
+  color: var(--color-brand-primary);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--color-brand-accent);
+  color: var(--color-brand-base);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-brand-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #888888;
+}
+
+/* ── Site-wide layout ──────────────────────────────────────── */
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Section shared base ───────────────────────────────────── */
+
+.site-hero,
+.site-about,
+.site-showcase,
+.site-process,
+.site-contact {
+  position: relative;
+  width: 100%;
+}
+
+/* ── Nav ────────────────────────────────────────────────────── */
+
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+
+.site-hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 max(4rem, 8vw) 6rem;
+  background-color: var(--color-brand-base);
+}
+
+
+
+.site-hero .hero-eyebrow {
+  letter-spacing: 0.25em;
+}
+
+.site-hero .hero-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(4rem, 9vw, 9rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--color-brand-primary);
+}
+
+.site-hero .hero-subtext {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  max-width: 40ch;
+}
+
+.site-hero .hero-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.site-hero .scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  right: max(4rem, 8vw);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* ── About ──────────────────────────────────────────────────── */
+
+.site-about {
+  background-color: var(--color-brand-surface);
+  padding: 10rem max(4rem, 8vw);
+}
+
+.site-about .about-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-brand-primary);
+}
+
+.site-about .about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+.site-about .stat-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  letter-spacing: -0.03em;
+  color: var(--color-brand-accent);
+  line-height: 1;
+}
+
+/* ── Showcase ───────────────────────────────────────────────── */
+
+.site-showcase {
+  background-color: var(--color-brand-base);
+  padding: 10rem 0;
+}
+
+.site-showcase .showcase-header {
+  padding: 0 max(4rem, 8vw) 5rem;
+}
+
+.site-showcase .showcase-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-brand-primary);
+}
+
+.site-showcase .gallery-scroll {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 0 max(4rem, 8vw) 4rem;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.site-showcase .gallery-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.site-showcase .gallery-card {
+  flex-shrink: 0;
+  width: 480px;
+  height: 600px;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-brand-elevated);
+}
+
+.site-showcase .card-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  color: #ffffff;
+}
+
+/* ── Process ────────────────────────────────────────────────── */
+
+.site-process {
+  background-color: var(--color-brand-surface);
+  padding: 10rem max(4rem, 8vw);
+}
+
+.site-process .process-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-brand-primary);
+}
+
+.site-process .steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.site-process .step-item {
+  padding: 3rem 2rem 3rem 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.site-process .step-item:last-child {
+  border-right: none;
+}
+
+.site-process .step-number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 5vw, 5rem);
+  color: rgba(0, 87, 255, 0.12);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 2rem;
+}
+
+.site-process .step-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--color-brand-primary);
+  margin-bottom: 0.75rem;
+}
+
+/* ── Contact ────────────────────────────────────────────────── */
+
+.site-contact {
+  background-color: var(--color-brand-base);
+  padding: 10rem max(4rem, 8vw);
+}
+
+.site-contact .contact-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-brand-primary);
+}
+
+.site-contact .contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8rem;
+  align-items: start;
+}
+
+.site-contact .form-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.site-contact .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.site-contact .form-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-brand-border-strong);
+  padding: 0.75rem 0;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-brand-primary);
+  transition: border-color 0.2s ease;
+  outline: none;
+  width: 100%;
+}
+
+.site-contact .form-input::placeholder {
+  color: var(--color-brand-tertiary);
+}
+
+.site-contact .form-input:focus {
+  border-bottom-color: var(--color-brand-accent);
+}
+
+.site-contact .form-textarea {
+  resize: none;
+  min-height: 140px;
+  padding-top: 0.75rem;
+}
+
+/* ── Button hover effects ──────────────────────────────────────── */
+
+/* Primary (filled blue) — lift + blue glow */
+.btn-primary:hover {
+  box-shadow: 0 8px 32px rgba(0, 87, 255, 0.28);
+}
+
+.btn-primary:active {
+  box-shadow: none;
+  transform: translateY(0) !important;
+}
+
+/* Secondary (outlined) — lift + neutral shadow */
+.btn-secondary:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:active {
+  box-shadow: none;
+  transform: translateY(0) !important;
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+
+.site-footer {
+  background-color: var(--color-brand-primary);
+  padding: 3rem max(4rem, 8vw);
+}
+
+.site-footer .footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — all breakpoints live here
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .site-hero {
+    padding: 0 2.5rem 5rem;
+  }
+
+  .site-about {
+    padding: 8vw 2.5rem;
+  }
+
+  .site-about .about-grid {
+    gap: 4rem;
+  }
+
+  .site-showcase .showcase-header {
+    padding: 0 2.5rem 4rem;
+  }
+
+  .site-showcase .gallery-scroll {
+    padding: 0 2.5rem 3rem;
+  }
+
+  .site-process {
+    padding: 8vw 2.5rem;
+  }
+
+  .site-process .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .site-process .step-item:nth-child(2) {
+    border-right: none;
+  }
+
+  .site-process .step-item:nth-child(3) {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .site-process .step-item:nth-child(4) {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .site-contact {
+    padding: 8vw 2.5rem;
+  }
+
+  .site-contact .contact-grid {
+    gap: 5rem;
+  }
+
+  .site-footer {
+    padding: 2.5rem 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .site-hero,
+  .site-about,
+  .site-showcase,
+  .site-process,
+  .site-contact {
+    overflow-x: hidden;
+  }
+
+  .site-nav .nav-links {
+    display: none;
+  }
+
+  .site-nav {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .site-hero {
+    padding: 0 1.5rem 4rem;
+    min-height: 100svh;
+  }
+
+  .site-hero .hero-headline {
+    font-size: clamp(3rem, 11vw, 5rem);
+  }
+
+  .site-hero .hero-subtext {
+    max-width: 100%;
+  }
+
+  .site-hero .scroll-indicator,
+  .site-hero .background-word,
+  [class*="vertical-label"],
+  [class*="ghost-text"],
+  [class*="scroll-indicator"] {
+    display: none;
+  }
+
+  .site-about {
+    padding: 5rem 1.5rem;
+  }
+
+  .site-about .about-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .site-showcase {
+    padding: 5rem 0;
+  }
+
+  .site-showcase .showcase-header {
+    padding: 0 1.5rem 3rem;
+  }
+
+  .site-showcase .gallery-scroll {
+    padding: 0 1.5rem 3rem;
+  }
+
+  .site-showcase .gallery-card {
+    width: 300px;
+    height: 420px;
+  }
+
+  .site-process {
+    padding: 5rem 1.5rem;
+  }
+
+  .site-process .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-process .step-item {
+    border-right: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 2rem 0;
+  }
+
+  .site-process .step-item:first-child {
+    border-top: none;
+  }
+
+  .site-contact {
+    padding: 5rem 1.5rem;
+  }
+
+  .site-contact .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+
+  .site-contact .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .site-footer .footer-inner {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .site-footer {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .site-nav a,
+  .site-footer a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Hero CTAs — stack vertically and stretch full width */
+  .site-hero .hero-cta-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .site-hero .hero-cta-row a {
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* About stats — reduce gap, allow wrap so 3 items don't overflow */
+  .site-about .stats-row {
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* Showcase header — stack, hide teaser description */
+  .site-showcase .showcase-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .site-showcase .showcase-header > p {
+    display: none;
+  }
+
+  /* Showcase scroll hint — decorative, hide on mobile */
+  .site-showcase .showcase-hint {
+    display: none;
+  }
+
+  /* Process header — stack, hide teaser description */
+  .site-process .process-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .site-process .process-header > p {
+    display: none;
+  }
+
+  /* Process bottom note — stack link below copy */
+  .site-process .process-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  /* Process "Start a project" link — 44px tap target */
+  .site-process .process-bottom a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Contact form fields — explicit full width when stacked */
+  .site-contact .form-field {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
